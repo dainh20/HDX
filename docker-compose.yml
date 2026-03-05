@@ -3,20 +3,12 @@ version: "3.9"
 services:
 
   hdx-core:
-    image: ubuntu:22.04
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: hdx-core
     hostname: hdx-core
     working_dir: /hdx
-    command: >
-      bash -c "
-      apt update &&
-      apt install -y openjdk-17-jdk python3 python3-pip python3-venv curl vim postgresql-client &&
-      update-alternatives --install /usr/bin/python python /usr/bin/python3 1 &&
-      pip install fastapi uvicorn sqlalchemy psycopg2-binary passlib[bcrypt] python-jose &&
-      tail -f /dev/null
-      "
-    environment:
-      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
     volumes:
       - ./:/hdx
     networks:
