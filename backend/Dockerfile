@@ -1,29 +1,39 @@
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-WORKDIR /hdx
-
-# Install system dependencies
-RUN apt update && apt install -y \
-    openjdk-17-jdk \
+# Cài system packages
+RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
-    python3-venv \
+    python3-dev \
+    build-essential \
+    libpq-dev \
+    git \
     curl \
     vim \
+    nano \
+    iputils-ping \
+    net-tools \
+    redis-tools \
     postgresql-client \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
-    && apt clean
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install python dependencies
-RUN pip install --no-cache-dir \
-    fastapi \
-    uvicorn \
-    sqlalchemy \
-    psycopg2-binary \
-    passlib[bcrypt] \
-    python-jose
+# Alias python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
-CMD ["tail", "-f", "/dev/null"]
+# Upgrade pip + cài core libs
+RUN pip install --upgrade pip && \
+    pip install django psycopg2-binary redis
+
+# Working directory
+WORKDIR /app
+
+# Tạo user (best practice)
+RUN useradd -ms /bin/bash devuser
+USER devuser
+
+# Default: dev mode (không auto chạy)
+CMD ["sleep", "infinity"]
