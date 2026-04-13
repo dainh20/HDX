@@ -1,0 +1,14 @@
+# Web framework cực nhẹ và nhanh
+fastapi
+uvicorn[standard]
+
+# Database - Trái tim của DE
+sqlalchemy
+psycopg2-binary
+pydantic
+
+# Kafka - Hệ thống tin nhắn thời gian thực
+aiokafka
+
+# Công cụ hỗ trợ
+python-dotenv

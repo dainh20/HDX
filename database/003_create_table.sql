@@ -25,6 +25,7 @@ CREATE TABLE account.accounts (
 CREATE TABLE market.stocks (
     id          BIGSERIAL PRIMARY KEY,
     symbol      TEXT NOT NULL UNIQUE,
+    name        TEXT NOT NULL,
     exchange    TEXT NOT NULL,
     status      TEXT NOT NULL,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),

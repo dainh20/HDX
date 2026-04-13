@@ -1,22 +1,21 @@
 FROM ubuntu:22.04
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Chống treo khi cài đặt và tối ưu Python
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Cài system packages
+# Cài đặt system packages (bao gồm thư viện cho Kafka và Postgres)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-dev \
     build-essential \
     libpq-dev \
-    git \
-    curl \
-    vim \
-    nano \
-    iputils-ping \
-    net-tools \
+    # Công cụ mạng & debug cho DE
+    git curl vim nano iputils-ping net-tools \
+    # Công cụ cho Kafka & Redis & DB
+    librdkafka-dev \
     redis-tools \
     postgresql-client \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -24,16 +23,20 @@ RUN apt-get update && apt-get install -y \
 # Alias python
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# Upgrade pip + cài core libs
-RUN pip install --upgrade pip && \
-    pip install django psycopg2-binary redis
+# Upgrade pip
+RUN pip install --upgrade pip
 
 # Working directory
 WORKDIR /app
 
-# Tạo user (best practice)
-RUN useradd -ms /bin/bash devuser
+# Copy requirements và cài đặt (Tận dụng Docker Cache)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+# Tạo user devuser và phân quyền cho thư mục app
+RUN useradd -ms /bin/bash devuser && chown -R devuser /app
 USER devuser
 
-# Default: dev mode (không auto chạy)
+# Giữ container chạy để vọc vạch (dev mode)
 CMD ["sleep", "infinity"]

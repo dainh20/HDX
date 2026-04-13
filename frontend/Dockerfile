@@ -1,4 +1,3 @@
-# Chỉ cần Nginx, không cần Node.js nữa
 FROM nginx:stable-alpine
 
 # Copy trực tiếp từ máy của bạn vào Nginx
