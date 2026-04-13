@@ -1,7 +1,7 @@
 # Node
-node_modules/
-dist/
-build/
+#node_modules/
+#dist/
+#build/
 
 # Python
 __pycache__/
@@ -10,7 +10,7 @@ __pycache__/
 #.env
 
 # Logs
-*.log
+#*.log
 
 # IDE
 #.vscode/
