@@ -73,4 +73,4 @@ Logic đóng băng: available_balance + frozen_balance = Tổng tài sản của
 
 
 ERD:
-![alt text](image.png)
+![alt text](image-1.png)
